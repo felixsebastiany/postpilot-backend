@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/email_templates.xsd">
+
+    <!-- Template customizado de boas-vindas -->
+    <template
+        id="postpilot_customer_welcome"
+        label="PostPilot - Customer Welcome Email"
+        file="customer_welcome.html"
+        type="html"
+        module="PostPilot_EmailTemplates"
+        area="frontend"/>
+
+    <!-- Override do template padrão de criação de conta -->
+    <template
+        id="customer_create_account_email_template"
+        label="PostPilot - Default Customer Welcome (Override)"
+        file="customer_welcome.html"
+        type="html"
+        module="PostPilot_EmailTemplates"
+        area="frontend"/>
+
+    <!-- Template customizado de reset de senha -->
+    <template
+        id="postpilot_password_reset"
+        label="PostPilot - Password Reset Email"
+        file="customer_password_reset.html"
+        type="html"
+        module="PostPilot_EmailTemplates"
+        area="frontend"/>
+
+    <!-- Override do template padrão de reset de senha -->
+    <template
+        id="customer_password_forgot_email_template"
+        label="PostPilot - Default Password Reset (Override)"
+        file="customer_password_reset.html"
+        type="html"
+        module="PostPilot_EmailTemplates"
+        area="frontend"/>
+
+    <!-- Template customizado de confirmação de alteração de senha -->
+    <template
+        id="postpilot_password_reset_password_template"
+        label="PostPilot - Password Reset Confirmation Email"
+        file="customer_password_reset_password_template.html"
+        type="html"
+        module="PostPilot_EmailTemplates"
+        area="frontend"/>
+
+    <!-- Override do template padrão de confirmação de alteração de senha -->
+    <template
+        id="customer_password_reset_password_template"
+        label="PostPilot - Default Password Reset Confirmation (Override)"
+        file="customer_password_reset_password_template.html"
+        type="html"
+        module="PostPilot_EmailTemplates"
+        area="frontend"/>
+
+    <!-- Template customizado de invoice -->
+    <template
+        id="postpilot_sales_email_invoice_template"
+        label="PostPilot - Invoice Email Template"
+        file="sales_email_invoice_template.html"
+        type="html"
+        module="PostPilot_EmailTemplates"
+        area="frontend"/>
+
+    <!-- Override do template padrão de invoice -->
+    <template
+        id="sales_email_invoice_template"
+        label="PostPilot - Default Invoice Email (Override)"
+        file="sales_email_invoice_template.html"
+        type="html"
+        module="PostPilot_EmailTemplates"
+        area="frontend"/>
+</config>

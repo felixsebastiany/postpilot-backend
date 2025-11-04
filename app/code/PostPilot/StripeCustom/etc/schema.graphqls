@@ -1,0 +1,89 @@
+type SubscriptionPlan {
+    id: ID! @doc(description: "Product ID")
+    name: String @doc(description: "Product name")
+    sku: String @doc(description: "Product SKU")
+    price: Float @doc(description: "Product price")
+    currency: String @doc(description: "Currency code")
+    billing_period: String @doc(description: "Billing period (monthly/yearly)")
+    description: String @doc(description: "Product description")
+    features: [String] @doc(description: "Plan features")
+    is_popular: Boolean @doc(description: "Is this the popular plan")
+}
+
+type CustomerSubscription {
+    id: ID! @doc(description: "Subscription ID")
+    status: String @doc(description: "Subscription status")
+    plan_name: String @doc(description: "Subscription plan name")
+    current_period_start: String @doc(description: "Current period start date")
+    current_period_end: String @doc(description: "Current period end date")
+    amount: Float @doc(description: "Subscription amount")
+    currency: String @doc(description: "Currency code")
+    billing_period: String @doc(description: "Billing period")
+    cancel_at_period_end: Boolean @doc(description: "Will cancel at period end")
+    payment_method: StripePaymentMethod @doc(description: "Payment method")
+}
+
+type StripePaymentMethod {
+    id: String! @doc(description: "Payment Method ID")
+    type: String @doc(description: "Payment Method Type (card, etc)")
+    card: StripeCard @doc(description: "Card details if type is card")
+}
+
+type StripeCard {
+    brand: String @doc(description: "Card brand")
+    last4: String @doc(description: "Last 4 digits")
+    exp_month: Int @doc(description: "Expiration month")
+    exp_year: Int @doc(description: "Expiration year")
+}
+
+input CreateSubscriptionInput {
+    product_id: ID! @doc(description: "Product ID to subscribe to")
+    payment_method_id: String! @doc(description: "Stripe payment method ID")
+    billing_period: String! @doc(description: "Billing period (monthly/yearly)")
+}
+
+input CancelSubscriptionInput {
+    subscription_id: ID! @doc(description: "Subscription ID to cancel")
+    cancel_at_period_end: Boolean @doc(description: "Cancel at period end or immediately")
+}
+
+input ChangePaymentMethodInput {
+    subscription_id: ID! @doc(description: "Subscription ID to change payment method")
+    payment_method_id: String! @doc(description: "Stripe Payment Method ID")
+}
+
+input CreateCheckoutSessionInput {
+    order_number: String! @doc(description: "Order number created via placeOrder mutation")
+    product_id: ID! @doc(description: "Product ID to subscribe to")
+    billing_period: String! @doc(description: "Billing period (monthly/yearly)")
+}
+
+input UpgradeSubscriptionInput {
+    subscription_id: ID! @doc(description: "Current subscription ID")
+    product_id: ID! @doc(description: "Pro product ID to upgrade to")
+    billing_period: String! @doc(description: "Billing period (monthly/yearly)")
+}
+
+type CheckoutSessionResult {
+    checkout_url: String! @doc(description: "Stripe Checkout Session URL")
+    session_id: String! @doc(description: "Stripe Checkout Session ID")
+    price_id: String! @doc(description: "Stripe Price ID")
+    amount: Float! @doc(description: "Subscription amount")
+    currency: String! @doc(description: "Currency code")
+    product_id: ID! @doc(description: "Product ID")
+    billing_period: String! @doc(description: "Billing period")
+}
+
+extend type Query {
+    getSubscriptionPlans: [SubscriptionPlan] @doc(description: "Get available subscription plans") @resolver(class: "\\PostPilot\\StripeCustom\\Model\\GraphQL\\Resolver\\GetSubscriptionPlans")
+    getCustomerSubscription: CustomerSubscription @doc(description: "Get customer's active subscription") @resolver(class: "\\PostPilot\\StripeCustom\\Model\\GraphQL\\Resolver\\GetCustomerSubscription")
+    getSavedPaymentMethods: [StripePaymentMethod] @doc(description: "Get customer's saved payment methods") @resolver(class: "\\PostPilot\\StripeCustom\\Model\\GraphQL\\Resolver\\GetSavedPaymentMethods")
+    createCheckoutSession(input: CreateCheckoutSessionInput!): CheckoutSessionResult @doc(description: "Create Stripe Checkout Session for subscription after order is placed") @resolver(class: "\\PostPilot\\StripeCustom\\Model\\GraphQL\\Resolver\\CreatePaymentIntent")
+}
+
+extend type Mutation {
+    createSubscription(input: CreateSubscriptionInput!): CustomerSubscription @doc(description: "Create a new subscription") @resolver(class: "\\PostPilot\\StripeCustom\\Model\\GraphQL\\Resolver\\CreateSubscription")
+    cancelSubscription(input: CancelSubscriptionInput!): Boolean @doc(description: "Cancel subscription") @resolver(class: "\\PostPilot\\StripeCustom\\Model\\GraphQL\\Resolver\\CancelSubscription")
+    changePaymentMethod(input: ChangePaymentMethodInput!): CustomerSubscription @doc(description: "Change payment method for subscription") @resolver(class: "\\PostPilot\\StripeCustom\\Model\\GraphQL\\Resolver\\ChangePaymentMethod")
+    upgradeSubscription(input: UpgradeSubscriptionInput!): CheckoutSessionResult @doc(description: "Upgrade subscription to Pro plan via Stripe Checkout") @resolver(class: "\\PostPilot\\StripeCustom\\Model\\GraphQL\\Resolver\\UpgradeSubscription")
+}
