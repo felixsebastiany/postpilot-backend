@@ -39,7 +39,7 @@ class GetSubscriptionPlans implements ResolverInterface
         $this->priceCurrency = $priceCurrency;
     }
 
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         try {
             $storeId = (int) $context->getExtensionAttributes()->getStore()->getId();
