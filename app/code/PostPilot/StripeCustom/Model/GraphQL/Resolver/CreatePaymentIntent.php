@@ -39,7 +39,7 @@ class CreatePaymentIntent implements ResolverInterface
         $this->logger = $logger;
     }
 
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!$this->customerSession->isLoggedIn()) {
             throw new \GraphQL\Error\Error((string) __('Customer not logged in'));

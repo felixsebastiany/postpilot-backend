@@ -80,3 +80,7 @@ frontend
 .github
 .cursorrules
 .cursor
+
+nginx-cors.conf
+nginx.conf
+nginx.conf.sample

@@ -22,7 +22,7 @@ class CancelSubscription implements ResolverInterface
         $this->stripeConfig = $stripeConfig;
     }
 
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!$this->customerSession->isLoggedIn()) {
             throw new \GraphQL\Error\Error((string) __('Customer not logged in'));
